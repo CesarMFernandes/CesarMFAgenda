@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "604596547243",
+    "project_id": "cesarmfagenda-b8da7",
+    "storage_bucket": "cesarmfagenda-b8da7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604596547243:android:5db4fd0ee690c9f89ed1ee",
+        "android_client_info": {
+          "package_name": "com.example.cesarmfagenda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwR8tayhz0dwgHiddX-axGuoeT_RATWkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

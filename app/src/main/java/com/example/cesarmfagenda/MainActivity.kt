@@ -3,45 +3,127 @@ package com.example.cesarmfagenda
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.*
+import com.example.cesarmfagenda.model.Agenda
+import com.example.cesarmfagenda.ui.AgendaFormScreen
+import com.example.cesarmfagenda.ui.AgendaListScreen
+import com.example.cesarmfagenda.ui.LoginScreen
+import com.example.cesarmfagenda.ui.RegisterScreen
 import com.example.cesarmfagenda.ui.theme.CesarMFAgendaTheme
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
+
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
+
             CesarMFAgendaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+                AgendaApp()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun AgendaApp() {
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CesarMFAgendaTheme {
-        Greeting("Android")
+    val auth = FirebaseAuth.getInstance()
+
+    var tela by remember {
+
+        mutableStateOf(
+            if (auth.currentUser != null)
+                "agendas"
+            else
+                "login"
+        )
+    }
+
+    var agendaEditar by remember {
+        mutableStateOf<Agenda?>(null)
+    }
+
+    when (tela) {
+
+        "login" -> {
+
+            LoginScreen(
+
+                onLogin = {
+                    tela = "agendas"
+                },
+
+                onRegister = {
+                    tela = "cadastro"
+                }
+            )
+        }
+
+        "cadastro" -> {
+
+            RegisterScreen(
+
+                onRegistered = {
+                    tela = "agendas"
+                },
+
+                onBack = {
+                    tela = "login"
+                }
+            )
+        }
+
+        "agendas" -> {
+
+            AgendaListScreen(
+
+                onCreate = {
+
+                    agendaEditar = null
+
+                    tela = "formulario"
+                },
+
+                onEdit = { agenda ->
+
+                    agendaEditar = agenda
+
+                    tela = "formulario"
+                },
+
+                onLogout = {
+
+                    tela = "login"
+                }
+            )
+        }
+
+        "formulario" -> {
+
+            AgendaFormScreen(
+
+                agendaEditar = agendaEditar,
+
+                onSave = {
+
+                    agendaEditar = null
+
+                    tela = "agendas"
+                },
+
+                onCancel = {
+
+                    agendaEditar = null
+
+                    tela = "agendas"
+                }
+            )
+        }
     }
 }
